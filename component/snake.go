@@ -41,13 +41,13 @@ func InitSnake(bodyLen int, playground *Playground) *Snake {
 	}
 
 	return &Snake{
-		UP,
+		DOWN,
 		ps,
 	}
 
 }
 
-//往前迈一步
+//Forward 往前迈一步
 func (s *Snake) Forward() {
 	np := Point{}
 
