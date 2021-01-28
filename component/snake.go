@@ -3,10 +3,10 @@ package component
 type DirectionCMD int
 
 const (
-	SnakeBody              = "S"
-	Wall                   = "W"
-	Space                  = " "
-	Food                   = "O"
+	SnakeBody              = 'S'
+	Wall                   = 'W'
+	Space                  = ' '
+	Food                   = 'O'
 	UP        DirectionCMD = 10 + iota
 	DOWN
 	LEFT
@@ -78,6 +78,16 @@ func (s *Snake) Shift() Point {
 	p := s.Position[0]
 	s.Position = s.Position[1:]
 	return p
+}
+
+func (s *Snake) CheckSelfCrash() bool {
+	p := s.Position[0]
+	for _, pos := range s.Position[1:] {
+		if pos.X == p.X && pos.Y == p.Y {
+			return true
+		}
+	}
+	return false
 }
 
 func (s *Snake) ChangeDirection(d DirectionCMD) {

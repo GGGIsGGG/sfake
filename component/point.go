@@ -15,8 +15,8 @@ type Point struct {
 }
 
 func (f *FoodPoint) RandomPos(playground *Playground, snake *Snake) *FoodPoint {
-	x := getRandomAbove0(playground.Width - 2)
-	y := getRandomAbove0(playground.Height - 2)
+	x := getRandomAbove0(playground.Width - 3)
+	y := getRandomAbove0(playground.Height - 3)
 	if CheckInSnake(snake, x, y) {
 		return f.RandomPos(playground, snake)
 	}

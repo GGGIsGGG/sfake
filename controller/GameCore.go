@@ -7,6 +7,7 @@ import (
 )
 
 type GameCore struct {
+	speed      int64
 	snake      *component.Snake
 	playground *component.Playground
 	foodPoint  *component.FoodPoint
@@ -14,10 +15,11 @@ type GameCore struct {
 	InputController
 }
 
-func NewGameCore() *GameCore {
+func NewGameCore(speed int64) *GameCore {
 	p := component.InitPlayground(40, 20)
 	s := component.InitSnake(6, p)
 	gameCore := GameCore{
+		int64(time.Second)/speed - 15*int64(time.Millisecond),
 		s,
 		p,
 		(&component.FoodPoint{}).RandomPos(p, s),
@@ -37,9 +39,8 @@ func (core *GameCore) Tick() {
 	} else {
 		core.Shift()
 	}
-	core.playground.Reset()
 
-	if core.playground.CheckCrash(core.snake) {
+	if core.playground.CheckCrash(core.snake) || core.snake.CheckSelfCrash() {
 		core.GameOver()
 	} else {
 		renderer.Render(core.playground, core.snake, core.foodPoint)
@@ -48,7 +49,7 @@ func (core *GameCore) Tick() {
 
 func (core *GameCore) Shift() {
 	p := core.snake.Shift()
-	core.playground.DrawByPoint(p, []byte(component.Wall)[0])
+	core.playground.DrawByPoint(p, component.Space)
 }
 
 func (core *GameCore) GameOver() {
@@ -67,11 +68,12 @@ func (core *GameCore) GameStart(rate int64) {
 	core.RegisterSnakeKeyDownEvent(core.snake)
 	for !core.stop {
 		core.Tick()
-		time.Sleep(time.Duration(int64(time.Second) / rate))
+		time.Sleep(time.Duration(core.speed))
 	}
 }
 
 func (core *GameCore) Reset() {
+	core.scoreBoard.Score = 0
 	core.playground.Reset()
 	core.snake = component.InitSnake(6, core.playground)
 	core.foodPoint.RandomPos(core.playground, core.snake)

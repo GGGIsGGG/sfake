@@ -7,7 +7,7 @@ import (
 
 func main() {
 	renderer.Clear()
-	gameCore := controller.NewGameCore()
+	gameCore := controller.NewGameCore(4)
 	//gameCore.GameStart(1)
 	gameCore.GameOver()
 }

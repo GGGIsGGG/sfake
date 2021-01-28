@@ -7,18 +7,24 @@ import (
 	"sfake/component"
 )
 
+//var cost int64
+
 func Render(playground *component.Playground, snake *component.Snake, point *component.FoodPoint) {
+
 	Clear()
 	view := getView(playground.Ground, snake, point)
 	for _, row := range view {
 		fmt.Println(string(row))
 	}
+	//ok := time.Duration(time.Now().UnixNano() - cost).Milliseconds()
+	//cost = time.Now().UnixNano()
+	//fmt.Printf("render cost: %d", ok)
 }
 
-func getView(bs [][]byte, snake *component.Snake, point *component.FoodPoint) [][]byte {
-	bs[point.Y][point.X] = []byte(component.Food)[0]
+func getView(bs [][]rune, snake *component.Snake, point *component.FoodPoint) [][]rune {
+	bs[point.Y][point.X] = component.Food
 	for _, body := range snake.Position {
-		bs[body.Y][body.X] = []byte(component.SnakeBody)[0]
+		bs[body.Y][body.X] = component.SnakeBody
 	}
 	return bs
 }
