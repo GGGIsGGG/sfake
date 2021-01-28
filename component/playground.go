@@ -1,6 +1,8 @@
 package component
 
 type Playground struct {
+	Width  int
+	Height int
 	Ground [][]byte
 }
 
@@ -36,6 +38,18 @@ func InitPlayground(rowCount, colCount int) *Playground {
 	ground = append(ground, row)
 
 	return &Playground{
+		rowCount,
+		colCount,
 		ground,
 	}
+}
+
+//CheckCrash 检查snake是否有撞墙
+func (playground *Playground) CheckCrash(s *Snake) bool {
+	for _, pos := range s.Position {
+		if pos.X <= 0 || pos.Y <= 0 || pos.X >= playground.Width-1 || pos.Y >= playground.Height-1 {
+			return true
+		}
+	}
+	return false
 }

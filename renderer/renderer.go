@@ -29,9 +29,9 @@ func Clear() {
 	cmd.Run()
 }
 
-func GameOver(board *component.ScoreBoard) {
+func ShowGameOver(board *component.ScoreBoard) {
 	Clear()
 	fmt.Println("Game Over!")
-	fmt.Printf("High Score: %d", board.HighScore)
-	fmt.Printf("Score: %d", board.Score)
+	fmt.Printf("High Score: %d\r\n", board.HighScore)
+	fmt.Printf("Score: %d\n", board.Score)
 }
