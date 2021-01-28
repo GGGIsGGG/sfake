@@ -2,17 +2,6 @@ package component
 
 type DirectionCMD int
 
-const (
-	SnakeBody              = 'S'
-	Wall                   = 'W'
-	Space                  = ' '
-	Food                   = 'O'
-	UP        DirectionCMD = 10 + iota
-	DOWN
-	LEFT
-	RIGHT
-)
-
 type Snake struct {
 	direction DirectionCMD
 	Position  []Point

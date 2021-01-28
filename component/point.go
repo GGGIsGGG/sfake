@@ -5,6 +5,17 @@ import (
 	"time"
 )
 
+const (
+	SnakeBody              = 'S'
+	Wall                   = 'W'
+	Space                  = ' '
+	Food                   = 'O'
+	UP        DirectionCMD = 10 + iota
+	DOWN
+	LEFT
+	RIGHT
+)
+
 type FoodPoint struct {
 	Point
 }
@@ -15,8 +26,8 @@ type Point struct {
 }
 
 func (f *FoodPoint) RandomPos(playground *Playground, snake *Snake) *FoodPoint {
-	x := getRandomAbove0(playground.Width - 3)
-	y := getRandomAbove0(playground.Height - 3)
+	x := getRandomAbove0(playground.Width - 1)
+	y := getRandomAbove0(playground.Height - 1)
 	if CheckInSnake(snake, x, y) {
 		return f.RandomPos(playground, snake)
 	}
@@ -37,7 +48,7 @@ func CheckInSnake(s *Snake, x, y int) bool {
 func getRandomAbove0(n int) int {
 	rand.Seed(time.Now().Unix())
 	r := 0
-	if r <= 0 {
+	for r <= 0 {
 		r = rand.Intn(n)
 	}
 	return r
