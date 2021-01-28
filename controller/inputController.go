@@ -1,57 +1,70 @@
 package controller
 
 import (
-	"bufio"
-	"fmt"
-	"os"
-	"time"
+	"github.com/nsf/termbox-go"
+	"sfake/component"
 )
 
-func GetScan() {
-	inputReader := bufio.NewReader(os.Stdin)
-	fmt.Printf("Please enter your name:")
-	go shit(inputReader, 'f')
-	//switch input {
-	//case "yinzhengjie\n":
-	//	fmt.Println("Welcome yinzhengjie!")
-	//case "bingan\n":
-	//	fmt.Println("Welcome bingan!")
-	//case "liufei\n":
-	//	fmt.Println("Welcome liufei")
-	//default:
-	//	fmt.Println("You are not welcome here! Goodbye!")
-	//}
-	/*    //version 2:
-	      switch input {
-	      case "yinzhengjie\n":
-	          fallthrough
-	      case "jiashanpeng\n":
-	          fallthrough
-	      case "hansenyu\n":
-	          fmt.Printf("Welcome %s\n", input)
-	      default:
-	          fmt.Printf("You are not welcome here! Goodbye!\n")
-	      }
+func init() {
+	err := termbox.Init()
+	if err != nil {
 
-	      // version 3:
-	      switch input {
-	      case "yinzhengjie\n", "wuzhiguang\n":
-	          fmt.Printf("Welcome %s", input)
-	      default:
-	          fmt.Printf("You are not welcome here! Goodbye!\n")
-	      }
+		panic(err)
 
-	*/
-	time.Sleep(time.Second * 20)
+	}
 }
 
-func shit(inputReader *bufio.Reader, n byte) {
-	input, err := inputReader.ReadString(n)
+type InputController struct {
+	stop bool
+}
 
-	if err != nil {
-		fmt.Println("There were errors reading, exiting program.")
-		return
+func (ic *InputController) RegisterMenuDownEvent() {
+loop:
+	for ic.stop {
+		switch ev := termbox.PollEvent(); ev.Type {
+		case termbox.EventKey:
+			switch ev.Key {
+			case termbox.KeySpace:
+				break loop
+			}
+		}
 	}
+}
 
-	fmt.Printf("Your name is %s", input)
+func (ic *InputController) RegisterSnakeKeyDownEvent(s *component.Snake) {
+	go func() {
+		for !ic.stop {
+			switch ev := termbox.PollEvent(); ev.Type {
+
+			case termbox.EventKey:
+				if ev.Ch != 0 {
+					switch ev.Ch {
+					case 'w':
+						s.ChangeDirection(component.UP)
+					case 's':
+						s.ChangeDirection(component.DOWN)
+					case 'a':
+						s.ChangeDirection(component.LEFT)
+					case 'd':
+						s.ChangeDirection(component.RIGHT)
+					}
+				} else {
+					switch ev.Key {
+
+					case termbox.KeyArrowUp:
+						s.ChangeDirection(component.UP)
+					case termbox.KeyArrowDown:
+						s.ChangeDirection(component.DOWN)
+					case termbox.KeyArrowLeft:
+						s.ChangeDirection(component.LEFT)
+					case termbox.KeyArrowRight:
+						s.ChangeDirection(component.RIGHT)
+
+					default:
+
+					}
+				}
+			}
+		}
+	}()
 }

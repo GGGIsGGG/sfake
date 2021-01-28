@@ -10,8 +10,8 @@ import (
 func Render(playground *component.Playground, snake *component.Snake, point *component.FoodPoint) {
 	Clear()
 	view := getView(playground.Ground, snake, point)
-	for _, raw := range view {
-		fmt.Println(string(raw))
+	for _, row := range view {
+		fmt.Println(string(row))
 	}
 }
 
@@ -32,6 +32,7 @@ func Clear() {
 func ShowGameOver(board *component.ScoreBoard) {
 	Clear()
 	fmt.Println("Game Over!")
-	fmt.Printf("High Score: %d\r\n", board.HighScore)
+	fmt.Printf("High Score: %d\n", board.HighScore)
 	fmt.Printf("Score: %d\n", board.Score)
+	fmt.Printf("press Space to start\n")
 }

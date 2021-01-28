@@ -14,16 +14,18 @@ const (
 )
 
 type Snake struct {
-	Direction DirectionCMD
+	direction DirectionCMD
 	Position  []Point
+	//上一步所走的方向，用来检测下一步一定不能走相反方向。
+	lastDirection DirectionCMD
 }
 
 func InitSnake(bodyLen int, playground *Playground) *Snake {
 	ps := make([]Point, 0, bodyLen)
 
 	originP := Point{
-		len(playground.Ground[0]) / 2,
-		len(playground.Ground) / 2,
+		playground.Width / 2,
+		playground.Height / 2,
 	}
 
 	ps = append(ps, originP)
@@ -43,6 +45,7 @@ func InitSnake(bodyLen int, playground *Playground) *Snake {
 	return &Snake{
 		DOWN,
 		ps,
+		DOWN,
 	}
 
 }
@@ -54,7 +57,7 @@ func (s *Snake) Forward() {
 	np.X = s.Position[s.snakeLen()-1].X
 	np.Y = s.Position[s.snakeLen()-1].Y
 
-	switch s.Direction {
+	switch s.direction {
 	case UP:
 		np.Y -= 1
 	case DOWN:
@@ -65,16 +68,38 @@ func (s *Snake) Forward() {
 		np.X += 1
 	}
 
+	s.lastDirection = s.direction
+
 	s.Position = append(s.Position, np)
 }
 
 //Shift 砍1格尾巴
-func (s *Snake) Shift() {
+func (s *Snake) Shift() Point {
+	p := s.Position[0]
 	s.Position = s.Position[1:]
+	return p
 }
 
 func (s *Snake) ChangeDirection(d DirectionCMD) {
-	s.Direction = d
+	switch d {
+	case UP:
+		if s.lastDirection != DOWN {
+			s.direction = d
+		}
+	case DOWN:
+		if s.lastDirection != UP {
+			s.direction = d
+		}
+	case LEFT:
+		if s.lastDirection != RIGHT {
+			s.direction = d
+		}
+	case RIGHT:
+		if s.lastDirection != LEFT {
+			s.direction = d
+		}
+	}
+
 }
 
 func (s *Snake) snakeLen() int {

@@ -1,79 +1,13 @@
 package main
 
-//
-//import (
-//	"sfake/controller"
-//)
-//
-//func main() {
-//	//renderer.Clear()
-//	//gameCore := controller.NewGameCore()
-//	//gameCore.Tick()
-//	//time.Sleep(time.Second)
-//	//gameCore.Tick()
-//	//time.Sleep(time.Second)
-//	//gameCore.Tick()
-//	//time.Sleep(time.Second)
-//	//gameCore.Tick()
-//	controller.GetScan()
-//
-//}
 import (
-	"fmt"
-
-	"github.com/go-vgo/robotgo"
-	hook "github.com/robotn/gohook"
+	"sfake/controller"
+	"sfake/renderer"
 )
 
 func main() {
-	add()
-	//low()
-	//event()
-}
-
-func add() {
-	fmt.Println("--- Please press ctrl + shift + q to stop hook ---")
-	robotgo.EventHook(hook.KeyDown, []string{"q", "ctrl", "shift"}, func(e hook.Event) {
-		fmt.Println("ctrl-shift-q")
-		robotgo.EventEnd()
-	})
-
-	fmt.Println("--- Please press w---")
-	robotgo.EventHook(hook.KeyDown, []string{"w"}, func(e hook.Event) {
-		fmt.Println("w")
-	})
-
-	fmt.Println("--- Please press up---")
-	robotgo.EventHook(hook.KeyDown, []string{"up"}, func(e hook.Event) {
-		fmt.Println("up")
-	})
-
-	s := robotgo.EventStart()
-	<-robotgo.EventProcess(s)
-}
-
-func low() {
-	EvChan := hook.Start()
-	defer hook.End()
-
-	for ev := range EvChan {
-		fmt.Println("hook: ", ev)
-	}
-}
-
-func event() {
-	ok := robotgo.AddEvents("q", "ctrl", "shift")
-	if ok {
-		fmt.Println("add events...")
-	}
-
-	keve := robotgo.AddEvent("k")
-	if keve {
-		fmt.Println("you press... ", "k")
-	}
-
-	mleft := robotgo.AddEvent("mleft")
-	if mleft {
-		fmt.Println("you press... ", "mouse left button")
-	}
+	renderer.Clear()
+	gameCore := controller.NewGameCore()
+	//gameCore.GameStart(1)
+	gameCore.GameOver()
 }
